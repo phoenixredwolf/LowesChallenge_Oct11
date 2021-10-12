@@ -2,7 +2,6 @@ package com.example.loweschallenge.ui.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,17 +15,16 @@ import com.example.loweschallenge.ui.viewmodel.MainViewModel
 import com.example.loweschallenge.utility.Resource
 
 
+
+
+
 class ForecastFragment : Fragment() {
 
     private var _binding: FragmentForecastBinding? = null
-    val binding: FragmentForecastBinding get() = _binding!!
+    private val binding: FragmentForecastBinding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +38,6 @@ class ForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-
             viewModel.weather.observe(viewLifecycleOwner){ it ->
                 progressBar.isVisible = it is Resource.Loading
                 when(it) {

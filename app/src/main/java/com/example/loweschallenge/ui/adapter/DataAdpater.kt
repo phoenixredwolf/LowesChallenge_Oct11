@@ -3,7 +3,6 @@ package com.example.loweschallenge.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.loweschallenge.data.model.Weather
 import com.example.loweschallenge.data.model.WeatherDetails
 import com.example.loweschallenge.databinding.ForecastItemBinding
 
@@ -11,6 +10,8 @@ class DataAdapter(
     private val weatherDetails: List<WeatherDetails>,
     private val itemClicked: (WeatherDetails) -> Unit
 ) : RecyclerView.Adapter<DataAdapter.WeatherViewHolder>() {
+
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
