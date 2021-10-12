@@ -1,5 +1,6 @@
 package com.example.loweschallenge.data.repo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.loweschallenge.data.remote.WeatherManager
@@ -10,20 +11,15 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import com.example.loweschallenge.BuildConfig.API_ID
 
-class DataRepositoryImpl: DataRepository {
+class DataRepositoryImpl {
 
-    private val _getWeatherData: MutableLiveData<Resource<WeatherResponseDTO>> by lazy {
-        MutableLiveData<Resource<WeatherResponseDTO>>()
-    }
-    val getWeatherData: LiveData<Resource<WeatherResponseDTO>> get() = _getWeatherData
-
-    private suspend fun getData(
+    suspend fun getData(
         city: String,
-        appid: String = API_ID,
-        units: String = "imperial"
+        appid: String,
+        units: String
     ) = flow {
         emit(Resource.Loading)
-        val response = WeatherManager.getData()
+        val response = WeatherManager.getData(city, API_ID, "imperial")
         val state = if (response.isSuccessful) {
             response.body()?.let {
                 Resource.Success(it)
@@ -31,11 +27,4 @@ class DataRepositoryImpl: DataRepository {
         } else Resource.Error("Error fetching data")
         emit(state)
     }
-
-    override suspend fun getWeather(city: String)  =
-        withContext(Dispatchers.IO) {
-            getData(city, API_ID, "imperial").collect {
-                _getWeatherData.value = it
-            }
-        }
 }

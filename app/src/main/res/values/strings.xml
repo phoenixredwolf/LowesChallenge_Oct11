@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LowesChallenge</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="city_name">City Name</string>
+    <string name="lookup">Lookup</string>
+    <string name="city">City</string>
 </resources>
