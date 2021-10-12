@@ -27,19 +27,12 @@ class MainViewModel @Inject constructor(repo: DataRepositoryImpl) : ViewModel() 
     private var getForecastJob: Job? = null
     val weather: LiveData<Resource<WeatherResponseDTO>> get() = _weatherData
 
-    var tempDetail = ""
-    var feelsLike = ""
-    var currWeather = ""
-    var weatherDetails = ""
-
-
-
     fun getForecast() {
         getForecastJob = viewModelScope.launch {
-            val weatherResponse = dataRepo.getData(city, BuildConfig.API_ID, "imperial").collect {
-
+            dataRepo.getData(city, BuildConfig.API_ID, "imperial").collect {
+                _weatherData.postValue(it)
             }
-            _weatherData.postValue(weatherResponse)
+
         }
     }
 }

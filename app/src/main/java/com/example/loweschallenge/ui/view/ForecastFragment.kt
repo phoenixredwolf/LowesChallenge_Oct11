@@ -1,6 +1,8 @@
 package com.example.loweschallenge.ui.view
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +23,11 @@ class ForecastFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +40,8 @@ class ForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-            viewModel.weather.observe(viewLifecycleOwner){
+
+            viewModel.weather.observe(viewLifecycleOwner){ it ->
                 progressBar.isVisible = it is Resource.Loading
                 when(it) {
                     is Resource.Loading -> {
@@ -44,11 +52,21 @@ class ForecastFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         rvForecast.adapter = DataAdapter(it.data.weather) {
-
+                            requireContext().toast(it.weather[0].description)
+                            requireContext().toast(it.main.temp.toString())
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun Context.toast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

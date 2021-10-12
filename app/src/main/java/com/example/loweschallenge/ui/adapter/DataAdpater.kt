@@ -22,7 +22,7 @@ class DataAdapter(
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int): Unit = with(holder) {
-        bind(weatherDetails[position]., weatherDetails[position].main.temp.toString())
+        bind(weatherDetails[position].weather[0].description, weatherDetails[position].main.temp.toString())
     }
 
     override fun getItemCount() = weatherDetails.size
