@@ -7,11 +7,16 @@ import com.example.loweschallenge.data.model.WeatherDetails
 import com.example.loweschallenge.databinding.ForecastItemBinding
 
 class DataAdapter(
-    private val weatherDetails: List<WeatherDetails>,
+
     private val itemClicked: (WeatherDetails) -> Unit
 ) : RecyclerView.Adapter<DataAdapter.WeatherViewHolder>() {
 
+    private var weatherDetails: List<WeatherDetails> = mutableListOf()
 
+    fun updateWeatherList(weather: List<WeatherDetails>) {
+        weatherDetails = weather
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,6 +39,7 @@ class DataAdapter(
         fun bind(weatherDet: String, temp:String) = with(binding) {
             tvWeather.text = weatherDet
             tvTemp.text = temp
+
         }
 
         companion object {

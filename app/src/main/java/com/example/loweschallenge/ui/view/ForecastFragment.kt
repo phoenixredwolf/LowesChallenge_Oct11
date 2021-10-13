@@ -2,6 +2,7 @@ package com.example.loweschallenge.ui.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.example.loweschallenge.R
 import com.example.loweschallenge.databinding.FragmentForecastBinding
 import com.example.loweschallenge.ui.adapter.DataAdapter
 import com.example.loweschallenge.ui.viewmodel.MainViewModel
@@ -24,6 +27,8 @@ class ForecastFragment : Fragment() {
     private val binding: FragmentForecastBinding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+    lateinit var dataAdapter: DataAdapter
+
 
 
     override fun onCreateView(
@@ -38,22 +43,32 @@ class ForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+            Log.i("Debug", "Instantiated viewmodel")
+            dataAdapter = DataAdapter(){
+                viewModel.getForecast()
+                viewModel.currTemp = it.main.temp.toString()
+                viewModel.currWeather = it.weather[0].description
+                Log.i("Debug", "DataAdapter")
+            }
             viewModel.weather.observe(viewLifecycleOwner){ it ->
                 progressBar.isVisible = it is Resource.Loading
                 when(it) {
                     is Resource.Loading -> {
                         progressBar.isVisible = true
+                        Log.i("Debug", "Loading")
                     }
                     is Resource.Error -> {
+                        Log.i("Debug", "Error")
                         Toast.makeText(requireContext(), it.errorMsg, Toast.LENGTH_LONG).show()
                     }
                     is Resource.Success -> {
-                        rvForecast.adapter = DataAdapter(it.data.weather) {
-                            requireContext().toast(it.weather[0].description)
-                            requireContext().toast(it.main.temp.toString())
-                        }
+                        Log.i("Debug", "Success")
+                        rvForecast.adapter = dataAdapter
                     }
                 }
+            }
+            include.btnBack.setOnClickListener {
+                view.findNavController().navigate(R.id.cityRequest)
             }
         }
     }

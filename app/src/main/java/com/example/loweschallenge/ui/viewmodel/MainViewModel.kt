@@ -22,6 +22,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(repo: DataRepositoryImpl) : ViewModel() {
 
     var city = ""
+    var currWeather = ""
+    var currTemp = ""
     private val dataRepo = repo
     private val _weatherData = MutableLiveData<Resource<WeatherResponseDTO>>()
     private var getForecastJob: Job? = null
