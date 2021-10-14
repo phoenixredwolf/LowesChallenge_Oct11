@@ -54,7 +54,8 @@ class CityFragment : Fragment() {
 
             binding.btnSubmit.setOnClickListener {
                 viewModel.city = binding.etCityInput.text.toString()
-                submit()
+                //submit()
+                viewModel.getForecast()
                 view.findNavController().navigate(R.id.action_cityRequest_to_forecastFragment)
             }
         }
@@ -63,7 +64,7 @@ class CityFragment : Fragment() {
 
 
     private fun submit() {
-        viewModel.getForecast()
+
     }
 
     override fun onDestroy() {

@@ -35,6 +35,7 @@ class ForecastFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.e("TAG", "onCreateView: Making the Forecast fragment", )
         _binding = FragmentForecastBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,6 +51,9 @@ class ForecastFragment : Fragment() {
                 viewModel.currWeather = it.weather[0].description
                 Log.i("Debug", "DataAdapter")
             }
+            //As soon as the adapter is made, you can go ahead and assign it to
+            //the RV because that part isnt going to change
+            rvForecast.adapter = dataAdapter
             viewModel.weather.observe(viewLifecycleOwner){ it ->
                 progressBar.isVisible = it is Resource.Loading
                 when(it) {
@@ -63,7 +67,9 @@ class ForecastFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         Log.i("Debug", "Success")
-                        rvForecast.adapter = dataAdapter
+                        //This is where you wanna be updating dataAdapter's list
+                        dataAdapter.updateWeatherList(it.data.weather)
+                        //rvForecast.adapter = dataAdapter
                     }
                 }
             }
